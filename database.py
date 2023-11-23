@@ -6,7 +6,7 @@ import secrets
 class DataManager:
     @classmethod
     async def initialise(cls) -> None:
-        db = await asqlite.connect("data.db")
+        db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
         await cursor.execute(
             """CREATE TABLE IF NOT EXISTS auth_keys (
@@ -19,7 +19,7 @@ class DataManager:
 
     @classmethod
     async def add_column(cls, column_name, column_type) -> None:
-        db = await asqlite.connect("data.db")
+        db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
         await cursor.execute(
             f"""ALTER TABLE auth_keys ADD COLUMN {column_name} {column_type}"""
@@ -29,7 +29,7 @@ class DataManager:
 
     @classmethod
     async def delete_column(cls, column_name) -> None:
-        db = await asqlite.connect("data.db")
+        db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
         await cursor.execute(
             f"""ALTER TABLE auth_keys DROP COLUMN {column_name}"""
@@ -40,7 +40,7 @@ class DataManager:
     @classmethod
     async def create_auth_key(cls, user) -> None:
         key = secrets.token_urlsafe(16)
-        db = await asqlite.connect("data.db")
+        db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
         await cursor.execute(
             """INSERT INTO auth_keys (key, user) VALUES (?, ?)""",
@@ -51,7 +51,7 @@ class DataManager:
     
     @classmethod
     async def delete_auth_key(cls, key) -> None:
-        db = await asqlite.connect("data.db")
+        db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
         await cursor.execute(
             """DELETE FROM auth_keys WHERE key=?""",
@@ -62,7 +62,7 @@ class DataManager:
     
     @classmethod
     async def check_user(cls, user) -> None:
-        db = await asqlite.connect("data.db")
+        db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
         await cursor.execute(
             """SELECT * FROM auth_keys WHERE user=?""",
@@ -77,7 +77,7 @@ class DataManager:
     
     @classmethod
     async def get_key(cls, user) -> None:
-        db = await asqlite.connect("data.db")
+        db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
         await cursor.execute(
             """SELECT * FROM auth_keys WHERE user=?""",
@@ -92,7 +92,7 @@ class DataManager:
         
     @classmethod
     async def check_key(cls, key) -> None:
-        db = await asqlite.connect("data.db")
+        db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
         await cursor.execute(
             """SELECT * FROM auth_keys WHERE key=?""",
@@ -106,10 +106,6 @@ class DataManager:
             return True
 
 async def main():
-    if not os.path.exists("data.db"):
-        with open("data.db", "w") as f:
-            pass
-    
     await DataManager.initialise()
 
 if __name__ == "__main__":
