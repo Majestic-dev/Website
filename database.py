@@ -1,7 +1,8 @@
-import asqlite
-import os
 import asyncio
 import secrets
+
+import asqlite
+
 
 class DataManager:
     @classmethod
@@ -13,7 +14,7 @@ class DataManager:
                 key TEXT PRIMARY KEY,
                 user TEXT
             )"""
-            )
+        )
         await db.commit()
         await db.close()
 
@@ -23,7 +24,7 @@ class DataManager:
         cursor = await db.cursor()
         await cursor.execute(
             f"""ALTER TABLE auth_keys ADD COLUMN {column_name} {column_type}"""
-            )
+        )
         await db.commit()
         await db.close()
 
@@ -31,9 +32,7 @@ class DataManager:
     async def delete_column(cls, column_name) -> None:
         db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
-        await cursor.execute(
-            f"""ALTER TABLE auth_keys DROP COLUMN {column_name}"""
-            )
+        await cursor.execute(f"""ALTER TABLE auth_keys DROP COLUMN {column_name}""")
         await db.commit()
         await db.close()
 
@@ -43,61 +42,24 @@ class DataManager:
         db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
         await cursor.execute(
-            """INSERT INTO auth_keys (key, user) VALUES (?, ?)""",
-            (key, user)
+            """INSERT INTO auth_keys (key, user) VALUES (?, ?)""", (key, user)
         )
         await db.commit()
         return key
-    
+
     @classmethod
     async def delete_auth_key(cls, key) -> None:
         db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
-        await cursor.execute(
-            """DELETE FROM auth_keys WHERE key=?""",
-            (key,)
-        )
+        await cursor.execute("""DELETE FROM auth_keys WHERE key=?""", (key,))
         await db.commit()
         await db.close()
-    
+
     @classmethod
     async def check_user(cls, user) -> None:
         db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
-        await cursor.execute(
-            """SELECT * FROM auth_keys WHERE user=?""",
-            (user,)
-        )
-        result = await cursor.fetchone()
-        await db.close()
-        if result is None:
-            return False
-        else:
-            return True
-    
-    @classmethod
-    async def get_key(cls, user) -> None:
-        db = await asqlite.connect("data/data.db")
-        cursor = await db.cursor()
-        await cursor.execute(
-            """SELECT * FROM auth_keys WHERE user=?""",
-            (user,)
-        )
-        result = await cursor.fetchone()
-        await db.close()
-        if result is None:
-            return None
-        else:
-            return result[0]
-        
-    @classmethod
-    async def check_key(cls, key) -> None:
-        db = await asqlite.connect("data/data.db")
-        cursor = await db.cursor()
-        await cursor.execute(
-            """SELECT * FROM auth_keys WHERE key=?""",
-            (key,)
-        )
+        await cursor.execute("""SELECT * FROM auth_keys WHERE user=?""", (user,))
         result = await cursor.fetchone()
         await db.close()
         if result is None:
@@ -105,8 +67,34 @@ class DataManager:
         else:
             return True
 
+    @classmethod
+    async def get_key(cls, user) -> None:
+        db = await asqlite.connect("data/data.db")
+        cursor = await db.cursor()
+        await cursor.execute("""SELECT * FROM auth_keys WHERE user=?""", (user,))
+        result = await cursor.fetchone()
+        await db.close()
+        if result is None:
+            return None
+        else:
+            return result[0]
+
+    @classmethod
+    async def check_key(cls, key) -> None:
+        db = await asqlite.connect("data/data.db")
+        cursor = await db.cursor()
+        await cursor.execute("""SELECT * FROM auth_keys WHERE key=?""", (key,))
+        result = await cursor.fetchone()
+        await db.close()
+        if result is None:
+            return False
+        else:
+            return True
+
+
 async def main():
     await DataManager.initialise()
+
 
 if __name__ == "__main__":
     asyncio.run(main())
