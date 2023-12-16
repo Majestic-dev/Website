@@ -3,7 +3,6 @@ import secrets
 
 import asqlite
 
-
 class DataManager:
     @classmethod
     async def initialise(cls) -> None:
@@ -25,14 +24,6 @@ class DataManager:
         await cursor.execute(
             f"""ALTER TABLE auth_keys ADD COLUMN {column_name} {column_type}"""
         )
-        await db.commit()
-        await db.close()
-
-    @classmethod
-    async def delete_column(cls, column_name) -> None:
-        db = await asqlite.connect("data/data.db")
-        cursor = await db.cursor()
-        await cursor.execute(f"""ALTER TABLE auth_keys DROP COLUMN {column_name}""")
         await db.commit()
         await db.close()
 
@@ -94,7 +85,6 @@ class DataManager:
 
 async def main():
     await DataManager.initialise()
-
 
 if __name__ == "__main__":
     asyncio.run(main())
