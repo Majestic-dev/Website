@@ -4,7 +4,7 @@ from database import DataManager
 
 check_auth_blueprint = Blueprint("check_auth", __name__)
 
-@check_auth_blueprint.route("/api/check_auth", methods=["POST"])
+@check_auth_blueprint.route("/check_auth", methods=["POST"])
 async def check_auth():
     auth_header = request.headers.get("Authorization")
     if auth_header:
