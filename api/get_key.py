@@ -4,7 +4,7 @@ from database import DataManager
 
 get_key_blueprint = Blueprint("get_key", __name__)
 
-@get_key_blueprint.route("/api/get_key", methods=["GET"])
+@get_key_blueprint.route("/get_key", methods=["GET"])
 async def get_key():
     user = request.get_json().get("user")
     if user:
