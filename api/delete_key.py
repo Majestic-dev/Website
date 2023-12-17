@@ -4,7 +4,7 @@ from database import DataManager
 
 delete_key_blueprint = Blueprint("delete_key", __name__)
 
-@delete_key_blueprint.route("/api/delete_key", methods=["DELETE"])
+@delete_key_blueprint.route("/delete_key", methods=["DELETE"])
 async def delete_key():
     auth_header = request.headers.get("Authorization")
     if auth_header:
