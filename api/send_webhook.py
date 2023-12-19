@@ -11,8 +11,9 @@ async def send_webhook():
     del data["webhook_url"]
     if webhook_url:
         try:
-            requests.post(webhook_url, data)
-            return jsonify({"success": "Webhook sent"}), 202
+            a = requests.post(webhook_url, data)
+            return jsonify({"content": f"{a.content}",
+                            "status_code": f"{a.status_code}"}), 202
         except:
             return jsonify({"error": "Invalid webhook url"}), 400
     else:
