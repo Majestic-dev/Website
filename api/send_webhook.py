@@ -11,7 +11,7 @@ async def send_webhook():
     del data["webhook_url"]
     if webhook_url:
         try:
-            a = requests.post(webhook_url, data)
+            a = requests.post(webhook_url, json=data)
             return jsonify({"content": f"{a.content}",
                             "status_code": f"{a.status_code}"}), 202
         except:
