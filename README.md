@@ -1,4 +1,4 @@
-# Project Title
+# Test project of a web application built with Flask and SQLite
 
 ## Introduction
 
