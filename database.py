@@ -14,6 +14,12 @@ class DataManager:
                 user TEXT
             )"""
         )
+        await cursor.execute(
+            """CREATE TABLE IF NOT EXISTS users (
+                user TEXT PRIMARY KEY,
+                password TEXT
+            )"""
+        )
         await db.commit()
         await db.close()
 
@@ -47,10 +53,22 @@ class DataManager:
         await db.close()
 
     @classmethod
-    async def check_user(cls, user) -> None:
+    async def check_user_from_keys(cls, user) -> None:
         db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
         await cursor.execute("""SELECT * FROM auth_keys WHERE user=?""", (user,))
+        result = await cursor.fetchone()
+        await db.close()
+        if result is None:
+            return False
+        else:
+            return True
+        
+    @classmethod
+    async def check_user_from_users(cls, user) -> None:
+        db = await asqlite.connect("data/data.db")
+        cursor = await db.cursor()
+        await cursor.execute("""SELECT * FROM users WHERE user=?""", (user,))
         result = await cursor.fetchone()
         await db.close()
         if result is None:
@@ -81,7 +99,33 @@ class DataManager:
             return False
         else:
             return True
+        
+    @classmethod
+    async def sign_up(cls, user, password) -> None:
+        db = await asqlite.connect("data/data.db")
+        cursor = await db.cursor()
+        if await cls.check_user_from_users(user):
+            return False
+        else:
+            await cursor.execute("""INSERT INTO users (user, password) VALUES (?, ?)""", (user, password))
+            await db.commit()
+            await db.close()
+            return True
 
+    @classmethod
+    async def log_in(cls, user, password) -> None:
+        db = await asqlite.connect("data/data.db")
+        cursor = await db.cursor()
+        await cursor.execute("""SELECT * FROM users WHERE user=?""", (user,))
+        result = await cursor.fetchone()
+        await db.close()
+        if result is None:
+            return False
+        else:
+            if result[1] == password:
+                return True
+            else:
+                return False
 
 async def main():
     await DataManager.initialise()
