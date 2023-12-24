@@ -1,12 +1,12 @@
 from flask import Flask, Blueprint
 from flask_cors import CORS
-from api.get_key import get_key_blueprint
-from api.check_auth import check_auth_blueprint
-from api.delete_key import delete_key_blueprint
-from api.send_webhook import send_webhook_blueprint
+from flask_application.api.get_key import get_key_blueprint
+from flask_application.api.check_auth import check_auth_blueprint
+from flask_application.api.delete_key import delete_key_blueprint
+from flask_application.api.send_webhook import send_webhook_blueprint
 
-from users.login_user import login_user_blueprint
-from users.register_user import register_user_blueprint
+from flask_application.users.login_user import login_user_blueprint
+from flask_application.users.register_user import register_user_blueprint
 
 app = Flask(__name__)
 CORS(app)
