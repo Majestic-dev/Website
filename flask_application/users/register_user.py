@@ -9,7 +9,7 @@ async def register_user():
     username = data.get('username')
     password = data.get('password')
 
-    if await DataManager.sign_up(username, password):
-        return jsonify({"status": "success"}), 201
+    if await DataManager.register_user(username, password):
+        return jsonify({"status": "success"}), 201 # User registered
     else:
-        return jsonify({"status": "failure"}), 400
+        return jsonify({"status": "failure"}), 400 # User already exists
