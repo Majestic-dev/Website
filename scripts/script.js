@@ -157,11 +157,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             // Handle the response from the server
             console.log(data);
-
-            // If key creation is successful, show the key
-            if (data["status"] == "success") {
-                pageTitle.textContent = 'Your API Key: ' + data["key"];
-            }
+        
+            pageTitle.textContent = 'Your API Key: ' + data["key"];
+            document.getElementById('createKey').style.display = 'none';
         })
         .catch(error => {
             // Handle the error

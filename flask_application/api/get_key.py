@@ -10,12 +10,10 @@ async def get_key():
     username = data.get('username')
     password = data.get('password')
 
-    print(username, password)
-
     key = await DataManager.get_authentication_key(username)
     
     if key is None:
         key = await DataManager.create_authentication_key(username, password)
-        return jsonify({"status": "success, key found", "key": key}), 200
-    else:
         return jsonify({"status": "success, key created", "key": key}), 200
+    else:
+        return jsonify({"status": "success, key found", "key": key}), 200
