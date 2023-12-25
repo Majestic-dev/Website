@@ -8,9 +8,8 @@ async def login_user():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-    print(data)
 
-    if await DataManager.log_in(username, password):
+    if await DataManager.login_user(username, password):
         return jsonify({"status": "success"}), 200
     else:
         return jsonify({"status": "failure"}), 400
