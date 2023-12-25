@@ -111,9 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // If signup is unsuccessful, show an alert
             if (data["status"] == "failure") {
-                newUsername.value = 'This username is already taken.';
-                newUsername.style.color = 'red';
-                newPassword.value = '';
+                alert('Username is already taken.');
             }
         })
         .catch(error => {
@@ -137,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Hide the 'createKey' and 'logout' buttons
         document.getElementById('createKey').style.display = 'none';
         this.style.display = 'none';
+        pageTitle.textContent = null;
     });
 
     document.getElementById('createKey').addEventListener('click', async function() {
