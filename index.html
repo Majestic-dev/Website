@@ -7,19 +7,23 @@
 <body>
     <h1 id="pageTitle"></h1>
     <div class="button-container">
-        <button class="button" id="login">Login</button>
-        <button class="button" id="signup">Sign Up</button>
+        <button class="button hide-on-login" id="login">Login</button>
+        <button class="button hide-on-login" id="signup">Sign Up</button>
     </div>
-    <div id="loginForm">
+    <div id="loginForm" class="hide-on-login">
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
         <button id="submitLogin">Submit</button>
     </div>
-    <div id="signupForm">
+    <div id="signupForm" class="hide-on-login">
         <input type="text" id="newUsername" placeholder="Username">
         <input type="password" id="newPassword" placeholder="Password">
+        <div id="signupError" style="color: red;"></div>
         <button id="submitSignup">Submit</button>
     </div>
+    <button id="createKey" style="display: none;">Create Key</button>
+    <button id="logout" style="display: none;" class="top-right">Log Out</button>
+    
     <script src="scripts/script.js"></script>
 </body>
 </html>
