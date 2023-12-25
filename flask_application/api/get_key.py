@@ -4,15 +4,18 @@ from database import DataManager
 
 get_key_blueprint = Blueprint("get_key", __name__)
 
-@get_key_blueprint.route("/get_key", methods=["GET"])
+@get_key_blueprint.route("/get_key", methods=["POST"])
 async def get_key():
-    user = request.get_json().get("user")
-    if user:
-        if await DataManager.check_user(user):
-            key = await DataManager.get_key(user)
-            return jsonify({"error": f"You already have a key which is {key}"}), 400
-        else:
-            key = await DataManager.create_auth_key(user)
-            return jsonify({"key": key}), 201
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    print(username, password)
+
+    key = await DataManager.get_authentication_key(username)
+    
+    if key is None:
+        key = await DataManager.create_authentication_key(username, password)
+        return jsonify({"status": "success, key found", "key": key}), 200
     else:
-        return jsonify({"error": "No user field"}), 400
+        return jsonify({"status": "success, key created", "key": key}), 200
