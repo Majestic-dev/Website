@@ -9,8 +9,6 @@ async def register_user():
     username = data.get('username')
     password = data.get('password')
 
-    print(username, password)
-
     if await DataManager.register_user(username, password):
         return jsonify({"status": "success, user registered"}), 201 # User registered
     else:
