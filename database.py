@@ -119,7 +119,6 @@ class DataManager:
 
 async def main():
     await DataManager.initialise()
-    await DataManager.create_authentication_key("test", "test")
 
 if __name__ == "__main__":
     asyncio.run(main())
