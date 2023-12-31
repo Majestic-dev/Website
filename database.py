@@ -1,11 +1,23 @@
 import asyncio
 import secrets
+import json
+import os
 
 import asqlite
 
 class DataManager:
+
+    @classmethod
+    async def create_config_file(cls):
+        if not os.path.exists('config.json'):
+            config = {"host": ""}
+            with open('config.json', 'w') as f:
+                json.dump(config, f)
+
     @classmethod
     async def initialise(cls) -> None:
+        await cls.create_config_file()
+
         db = await asqlite.connect("data/data.db")
         cursor = await db.cursor()
         await cursor.execute(
