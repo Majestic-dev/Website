@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
     display: flex;
     justify-content: center;
@@ -6,7 +10,7 @@ body {
     margin: 0;
     background-color: #1E1E1E;
     font-family: Arial, sans-serif;
-    color: #D4D4D4;
+    color: #1E1E1E;
     flex-direction: column;
     font-weight: bold; /* Add this line to make the text thicker */
 }
