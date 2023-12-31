@@ -1,4 +1,11 @@
+var hostAddress = null;
 
+fetch('../config.json')
+    .then(response => response.json())
+    .then(config => {
+        hostAddress = config.host;
+    })
+    .catch(error => console.error('Error:', error));
 
 document.addEventListener('DOMContentLoaded', function() {
     var loginButton = document.getElementById('login');
@@ -30,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     
         try {
-            const response = await fetch('http://localhost:5000/users/login_user', {  // Replace with the correct URL
+            const response = await fetch(hostAddress + "/users/login_user", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -80,8 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Form a request to the Flask application
-        fetch('http://localhost:5000/users/register_user', {
+        fetch(hostAddress + "/users/register_user", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -142,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let username = document.cookie.split(';')[0].split('=')[1];
         let password = document.cookie.split(';')[1].split('=')[1];
         
-        fetch('http://localhost:5000/api/get_key', {
+        fetch(hostAddress + "/api/get_key", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
