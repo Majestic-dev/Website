@@ -9,7 +9,7 @@ class DataManager:
 
     @classmethod
     async def create_config_file(cls):
-        if not os.path.exists('config.json'):
+        if not os.path.exists('data/config.json'):
             config = {"host": ""}
             with open('config.json', 'w') as f:
                 json.dump(config, f)
