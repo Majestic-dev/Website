@@ -34,11 +34,11 @@ async def main():
     await DataManager.initialise()
 
 if __name__ == "__main__":
-    config_file = open("config.json")
+    config_file = open("data/config.json")
     host_address = json.load(config_file)["host"]
 
     if host_address:
         app.run(debug=True)
     else:
         asyncio.run(main())
-        print("Please set the host address in config.json")
+        print("Please set the host address in data/config.json")
