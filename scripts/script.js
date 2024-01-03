@@ -1,6 +1,6 @@
 var hostAddress = null;
 
-fetch('../config.json')
+fetch("data/config.json")
     .then(response => response.json())
     .then(config => {
         hostAddress = config.host;
