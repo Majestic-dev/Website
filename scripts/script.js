@@ -1,4 +1,5 @@
 var hostAddress = null;
+var logged_in = false;
 
 fetch("data/config.json")
     .then(response => response.json())
@@ -28,7 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
         pageTitle.textContent = 'Sign Up';
     });
 
-    submitLogin.addEventListener('click', async function() {
+    submitLogin.addEventListener('click', async function(event) {
+        event.preventDefault();
         var username = document.getElementById('username');
         var password = document.getElementById('password');
         if (!username.value || !password.value) {
@@ -55,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
             // If login is successful, show the buttons and hide all others
             if (data["status"] == "success") {
+                logged_in = true;
                 document.getElementById('createKey').style.display = 'block';
                 document.getElementById('logout').style.display = 'block';
     
@@ -70,15 +73,13 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
         }
 
-        document.cookie = "username=" + username.value;
-        document.cookie = "password=" + password.value;
-
         // Clear the input fields
         username.value = '';
         password.value = '';
     });
     
-    submitSignup.addEventListener('click', function() {
+    submitSignup.addEventListener('click', function(event) {
+        event.preventDefault();
         var newUsername = document.getElementById('newUsername');
         var newPassword = document.getElementById('newPassword');
         
@@ -104,15 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // If signup is successful, show the buttons and hide all others
             if (data["status"] == "success") {
-                document.getElementById('createKey').style.display = 'block';
-                document.getElementById('logout').style.display = 'block';
-    
-                // Hide all buttons with the 'hide-on-login' class
-                const buttonsToHide = document.getElementsByClassName('hide-on-login');
-                for (let button of buttonsToHide) {
-                    button.style.display = 'none';
-                }
-                pageTitle.textContent = null;
+                location.reload();
             }
 
             // If signup is unsuccessful, show an alert
@@ -124,9 +117,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Handle the error
             console.error('Error:', error);
         });
-
-        document.cookie = "username=" + newUsername.value;
-        document.cookie = "password=" + newPassword.value;
 
         // Clear the input fields
         newUsername.value = '';
@@ -144,9 +134,10 @@ document.addEventListener('DOMContentLoaded', function() {
         pageTitle.textContent = null;
     });
 
-    document.getElementById('createKey').addEventListener('click', async function() {
-        let username = document.cookie.split(';')[0].split('=')[1];
-        let password = document.cookie.split(';')[1].split('=')[1];
+    document.getElementById('createKey').addEventListener('click', async function(event) {
+        event.preventDefault();
+        let username = prompt('Enter your username');
+        let password = prompt('Enter your password');
         
         fetch(hostAddress + "/api/get_key", {
             method: 'POST',
@@ -158,13 +149,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 password: password
             })
         })
-        .then(response => response.json())
+        .then(response => response.json()) 
         .then(data => {
             // Handle the response from the server
             console.log(data);
-        
-            pageTitle.textContent = 'Your API Key: ' + data["key"];
-            document.getElementById('createKey').style.display = 'none';
+
+            if (data["status"] == "failure, invalid credentials") {
+                alert('Invalid username');
+                return;
+            }
+
+            if (data["status"] == "success") {
+                pageTitle.textContent = 'Your API Key: ' + data["key"];
+                document.getElementById('createKey').style.display = 'none';
+            }
         })
         .catch(error => {
             // Handle the error
